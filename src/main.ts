@@ -1,9 +1,11 @@
 import './style.css'
+
+type Image = { img: HTMLDivElement, speedX: number, speedY: number, canMove: boolean }
 const container = document.querySelector<HTMLDivElement>('#app')
 const logo = document.querySelector<HTMLDivElement>('.logo')
 
 const numberOfImages: number = 50
-const images: { img: HTMLDivElement, speedX: number, speedY: number, canMove: boolean }[] = []
+const images: Image[] = []
 
 for (let i = 0; i < numberOfImages; i++) {
   const imgWrapper: HTMLDivElement = document.createElement('div')
