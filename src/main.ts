@@ -72,7 +72,7 @@ const generateBalls = () => {
       // Allows the last frame to start moving after 5 seconds
       setTimeout(() => {
         balls[0].canMove = true
-      }, 50) 
+      }, 8000) 
     } else {
       // Random position for all other images
       const maxX: number = window.innerWidth - size
@@ -115,7 +115,6 @@ function updatePosition(): void {
 }
 
 updatePosition()
-
 const ballsQueue: string[] = []
 
 document.addEventListener('keydown', (event) => {
@@ -139,10 +138,10 @@ const refresh = () => {
 }
 
 setInterval(() => {
-  console.log(ballsQueue.length);
   
   if (ballsQueue.length > 0) {
     ballUrls.unshift(ballsQueue[0])
+    showNewBallScreen(ballsQueue[0])
     if (ballUrls.length > maxBalls) {
       ballUrls.pop()
     }
@@ -150,4 +149,43 @@ setInterval(() => {
     ballsQueue.shift()
     refresh()
   }
-}, 2000)
+}, 10000)
+
+
+const showNewBallScreen = (imageUrl: string) => {
+  const fullScreenDiv = document.createElement('div');
+  fullScreenDiv.className = 'new-ball-image-wrapper';
+  
+  const img = document.createElement('img');
+  img.src = imageUrl;
+  img.style.width = `${baseSize}px`
+  img.style.height = `${baseSize}px`
+  fullScreenDiv.appendChild(img);
+
+  document.body.appendChild(fullScreenDiv);
+
+  createStars(fullScreenDiv, 1000)
+  setTimeout(() => {
+    document.body.removeChild(fullScreenDiv);
+  }, 4000);
+}
+
+const createStars = (fullScreenDiv: HTMLDivElement, number: number = 400) => {
+  const starColors = ["#ffcda5", "#ffd250", "#ff8220", "#fff220", "#ff5000"]
+
+  if (fullScreenDiv) {
+    for (let i = 0; i < number; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        const t = (1 + 0.01 * Math.floor(Math.random() * 100)) * 1000;
+        particle.style.animationDuration = t + 'ms';
+        particle.style.animationDelay = '-' + (0.01 * Math.floor(Math.random() * 100) * t) + 'ms';
+        particle.style.transform = `translate(${Math.random() * 100}vw, ${Math.random() * 100}vh)`;
+        particle.style.backgroundColor = starColors[Math.floor(Math.random()*starColors.length)];
+
+        fullScreenDiv.appendChild(particle);
+    }    
+  }
+}
+
